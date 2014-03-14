@@ -1,7 +1,7 @@
 var express  =  require('express'),
 	app      =  express(),
 	mongoose =  require('mongoose'),
-	port     =  process.env.PORT || 8080
+	port     =  process.env.PORT || 3333
 
 mongoose.connect('mongodb://admin:password@novus.modulusmongo.net:27017/mUj4asav');
 
@@ -29,7 +29,6 @@ app.get('/api/todos', function(req, res){
 });
 
 app.post('/api/todos', function(req, res){
-
 	Todo.create({
 		text: req.body.text,
 		done: false
@@ -48,20 +47,34 @@ app.post('/api/todos', function(req, res){
 	});
 });
 
-app.delete('/api/todos/:todo_id', function(req, res){
-	Todo.remove({
-		_id: req.params.todo_id
-	}, function(error, todo){
-		if(error){
-			res.send(error);
-		}
+app.put('/api/todo/:todo_id', function(req, res){
+	Todo.findById(req.params.todo_id, function(error, todo){
+		todo.done = !todo.done;
+		todo.save(function (err) {
+	      if (!err) {
+	        console.log("updated");
+	      } else {
+	        console.log(err);
+	      }
+	    });
+		
+	});
+});
 
-		Todo.find(function(error, todos){
+app.delete('/api/todo/:todo_id', function(req, res){
+	return Todo.findById(req.params.todo_id, function(error, todo){
+		return todo.remove(function(error){
 			if(error){
-				res.send(error)
-			} else {
-				res.json(todos);
-			}
+				res.send("ERROR: " + error);
+			} 
+
+			Todo.find(function(error, todos){
+				if(error){
+					res.send(error);
+				} else {
+					res.json(todos);
+				}
+			});
 		});
 	});
 });
@@ -69,5 +82,5 @@ app.delete('/api/todos/:todo_id', function(req, res){
 app.get('*', function(req, res){
 	res.sendfile('./public/index.html');
 });
-app.listen(8080);
+app.listen(port);
 console.log('App listening to pawt ' + port);

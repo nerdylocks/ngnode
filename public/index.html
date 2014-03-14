@@ -4,19 +4,52 @@
 <head>
 	<title>NGNODE</title>
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
-	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script>
+	<script src="js/bower_components/angular/angular.js"></script>
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+	<script src="js/bower_components/angular-strap/dist/angular-strap.min.js"></script>
+	<script src="js/bower_components/angular-strap/dist/angular-strap.tpl.min.js"></script>
+	
+	
+	<script src="js/bower_components/angular-resource/angular-resource.js"></script>
+    <script src="js/bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="js/bower_components/angular-route/angular-route.js"></script>
+
+	
 	<script src="core.js" type="text/javascript"></script>
 </head>
 <body ng-app="ngnode">
 <div class="container" ng-controller="mainCtrl">
-	<p>{{todos.length}}</p>
-	<form ng-submit="createTodo()">
-		<input type="text" ng-model="formData.text">
-	</form>
-	<ul>
-		<li ng-repeat="todo in todos">{{todo.text}} - {{todo.done}}</li>
-	</ul>
+	<br>
+	<br>
+	<div class="row">
+		<div class="col-md-8">
+			
+			<form ng-submit="createTodo()">
+				<input type="text" class="form-control" ng-model="formData.text">
+			</form>
+		</div>
+		<div class="col-md-4">
+			
+		</div>
+	</div>
+	<br>
+	<div class="row">
+		<div class="col-md-8">
+			<ul class="list-group">
+				<li class="list-group-item" ng-repeat="todo in todos">
+					<div class="checkbox">
+					    <label>
+							<input type="checkbox" ng-model="todo.done" ng-change="update(todo._id)">{{todo.text}}
+				    	</label>
+				    	<button ng-click="delete(todo._id)" class="pull-right btn btn-primary">Delete</button>
+				  	</div>
+				  	
+				</li>
+			</ul>
+			<p>I hate to do lists, but you <b>{{todos.length}}</b> left!</p>
+		</div>
+		<div class="col-mg-4"></div>
+	</div>
 </div>
 
 </body>
